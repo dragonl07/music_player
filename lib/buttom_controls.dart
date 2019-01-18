@@ -2,14 +2,16 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:music_player/theme.dart';
+import 'package:flutter/services.dart';
 
 
 class ButtomControls extends StatelessWidget {
-  const ButtomControls({
+
+ const ButtomControls({
     Key key,
   }) : super(key: key);
-
-  @override
+  
+@override
   Widget build(BuildContext context) {
     return new Container(
       width: double.infinity,
@@ -91,7 +93,7 @@ class PreviousButton extends StatelessWidget {
         size: 40.0,
       ),
       onPressed: () {
-        //TODO:
+        
       },
     );
   }
@@ -140,12 +142,12 @@ class NextButton extends StatelessWidget {
         color: Colors.white,
         size: 40.0,
       ),
-      onPressed: () {
-        //TODO:
+      onPressed: (){
+        next_song;
       },
-    );
-  }
-}
+          );
+        }
+ }
 
 class CircleClipper extends CustomClipper<Rect> {
   @override
@@ -162,3 +164,63 @@ class CircleClipper extends CustomClipper<Rect> {
   }
 
 }
+
+String next_song;
+class PlatformChannel extends StatefulWidget {
+  @override
+  _PlatformChannelState createState() => _PlatformChannelState();
+}
+
+class _PlatformChannelState extends State<PlatformChannel> {
+  static const MethodChannel methodChannel =
+      MethodChannel('next_song');
+  static const EventChannel eventChannel =
+      EventChannel('next_song is getting');
+
+  var _next_song = 'song: unknown.';
+  var _songStatus = 'song status: unknown.';
+
+  Future<void> _getNextSong() async {
+    
+    try {
+      final int result = await methodChannel.invokeMethod('method invoke');
+      next_song = 'song: $result%.';
+    } on PlatformException {
+      next_song = 'Failed to get battery level.';
+    }
+    setState(() {
+      _next_song = next_song;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    eventChannel.receiveBroadcastStream().listen(_onEvent, onError: _onError);
+  }
+
+  void _onEvent(Object event) {
+    setState(() {
+      _songStatus =
+          "song status: ${event == 'charging' ? '' : 'dis'}getting.";
+    });
+  }
+
+  void _onError(Object error) {
+    setState(() {
+      _songStatus = 'song status: unknown.';
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return null;
+  }
+}
+
+void main() {
+  runApp(MaterialApp(home: PlatformChannel()));
+}
+
+
