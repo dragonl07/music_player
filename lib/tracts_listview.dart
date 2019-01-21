@@ -61,8 +61,7 @@ class _TrackListViewState extends State<TrackListView> {
           ),
         );
 
-    final makeBody = Container(
-      // decoration: BoxDecoration(color: Color.fromRGBO(58, 66, 86, 1.0)),
+    final makeBody = SingleChildScrollView(
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,

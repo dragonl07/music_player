@@ -3,9 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:music_player/audio_service.dart';
 import 'package:music_player/player_state.dart';
+import 'package:music_player/song_list.dart';
 import 'package:music_player/source.dart';
 import 'package:music_player/songs.dart';
 import 'package:music_player/theme.dart';
+import 'package:music_player/tracts_listview.dart';
 
 var tracksList = [
   Track(
@@ -180,7 +182,10 @@ class _MyHomePageState extends State<MyHomePage> {
                Icons.menu
               ),
                   onPressed: (){
-                   
+                   Navigator.push(
+                     context,
+                      MaterialPageRoute(builder: (context) => SongList()),
+  );
               },
            ),
          ],
@@ -275,7 +280,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 onPressed: (){
                                   next();
                                 },
-                                    ),
+                                ),
                           
                             new Expanded(child: new Container()),
                             ],
