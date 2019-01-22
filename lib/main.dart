@@ -1,29 +1,10 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:music_player/audio_service.dart';
 import 'package:music_player/player_state.dart';
-import 'package:music_player/song_list.dart';
 import 'package:music_player/source.dart';
 import 'package:music_player/songs.dart';
 import 'package:music_player/theme.dart';
-import 'package:music_player/tracts_listview.dart';
-
-var tracksList = [
-  Track(
-      "0",
-      "SomaFM: Deep Space",
-      "http://somafm.com/img3/deepspaceone-400.jpg",
-      "http://ice1.somafm.com/deepspaceone-128-mp3"),
-  Track("1", "SomaFM: Drone Zone", "http://somafm.com/img3/dronezone-400.jpg",
-      "http://ice3.somafm.com/dronezone-256-mp3"),
-  Track(
-      "2",
-      "Space Station Soma",
-      "http://somafm.com/img3/spacestation-400.jpg",
-      "http://ice1.somafm.com/spacestation-128-mp3")
-];
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -48,7 +29,6 @@ class MyHomePage extends StatefulWidget {
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
- 
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -87,18 +67,24 @@ class _MyHomePageState extends State<MyHomePage> {
         case PlayerState.onPause:
           _playIcon = Icons.play_arrow;
           break;
-        case PlayerState.onStop:
-          _playIcon = Icons.stop;
       }
     });
   }
 
   Future<String> playPause() async {
+  String result;
     if (_state == PlayerState.onPlay) {
-        return await AudioService.pause();
+        result = await AudioService.pause();
     } else {
-        return await AudioService.play();
+        result = await AudioService.play();
     }
+
+    if(result=="onPlay"){
+      _state = PlayerState.onPlay;
+    }else{
+      _state = PlayerState.onPause;
+    }
+    updatePlayIcon(_state);
   }
 
   Future<String> next() async {
@@ -182,10 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
                Icons.menu
               ),
                   onPressed: (){
-                   Navigator.push(
-                     context,
-                      MaterialPageRoute(builder: (context) => SongList()),
-  );
+                   
               },
            ),
          ],
@@ -205,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   text: "",
                   children: [
                     new TextSpan (
-                      text: 'songtitle\n',
+                      text: "",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14.0,
@@ -280,7 +263,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 onPressed: (){
                                   next();
                                 },
-                                ),
+                                    ),
                           
                             new Expanded(child: new Container()),
                             ],
