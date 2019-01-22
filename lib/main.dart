@@ -295,3 +295,4 @@ class CircleClipper extends CustomClipper<Rect> {
   }
 
 }
+
