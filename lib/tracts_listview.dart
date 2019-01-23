@@ -35,7 +35,7 @@ class _TrackListViewState extends State<TrackListView> {
   }
 
   onTrackClick(TrackMetadata track) {
-    AudioService.playTrack(track);
+    AudioService.play(track);
   }
 
   @override

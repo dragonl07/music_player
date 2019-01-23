@@ -40,7 +40,7 @@ import AVFoundation
             switch call.method
             {
             case "play":
-                self?.audioService.play()
+                self?.audioService.play(StreamObject.mapJson(call.arguments as? String))
                 result("onPlay")
             case "pause":
                 self?.audioService.pause()

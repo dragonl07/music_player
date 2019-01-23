@@ -61,7 +61,38 @@ class StreamObject: Object
         self.urlString = urlString
         self.title = title
     }
-
+    
+    static func mapJson(_ json: String?) -> StreamObject?
+    {
+        guard let json = json else {
+            return nil
+        }
+        
+        do
+        {
+            let jsonData = try JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: .allowFragments) as! [String: String]
+            let streamObject = StreamObject()
+            
+            streamObject.id = jsonData[MediaIdKey] ?? ""
+            streamObject.title = jsonData[MediaTitleKey] ?? ""
+            
+            if jsonData[MediaUrlKey] != nil
+            {
+                streamObject.urlString = jsonData[MediaUrlKey]!
+            }
+            else
+            {
+                return nil
+            }
+            
+            return streamObject
+        }
+        catch
+        {
+            return nil
+        }
+    }
+    
 //    func writeImage(_ image: UIImage) -> Bool
 //    {
 //        let documentPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!

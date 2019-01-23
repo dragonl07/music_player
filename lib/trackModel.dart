@@ -1,4 +1,6 @@
-class TrackMetadata {
+
+
+class TrackMetadata extends Object {
   static const String MediaTitleKey = "title";
   static const String MediaArtistKey = "artist";
   static const String MediaUrlKey = "url";
@@ -9,6 +11,13 @@ class TrackMetadata {
   String url = "";
   String id = "";
   bool isPlaying = false;
+
+  Map<String, dynamic> toJson() => {
+    MediaIdKey: id,
+    MediaArtistKey: artist,
+    MediaTitleKey: title,
+    MediaUrlKey: url
+  };
 
   void map(Map data) {
     data.forEach((k, v) {
@@ -38,6 +47,12 @@ class TrackMetadata {
           break;
         case MediaTitleKey:
           metadata.title = v;
+          break;
+        case MediaIdKey:
+          metadata.id = v;
+          break;
+        case MediaUrlKey:
+          metadata.url = v;
           break;
         default:
           print("Unknown key");

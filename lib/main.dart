@@ -48,16 +48,10 @@ class _MyHomePageState extends State<MyHomePage> {
         updatePlayIcon(data.playerState);
       }
       if (data.trackId != null) {
-        //updateCurrentTrack(data.trackId);
+        
       }
     });
   }
-
-  // void updateCurrentTrack(String newTrackId) {
-  //   setState(() {
-  //     _tracks.forEach((f) => f.isPlayning = (f.id == newTrackId));
-  //   });
-  // }
 
   void updatePlayIcon(PlayerState state) {
     setState(() {
@@ -92,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (_state == PlayerState.onPlay) {
       result = await AudioService.pause();
     } else {
-      result = await AudioService.play();
+      result = await AudioService.play(null);
     }
 
     if (result == "onPlay") {

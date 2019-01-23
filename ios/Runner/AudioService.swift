@@ -48,16 +48,30 @@ class AudioService: NSObject
         }
     }
     
-    func play()
+    func play(_ streamObject: StreamObject? = nil)
     {
+        self.wasplaying = true
         if self.player != nil
         {
-            self.player.play()
-            self.wasplaying = true
+            if streamObject != nil
+            {
+                self.prepareToPlay(streamObject!.urlString)
+            }
+            else
+            {
+                self.player.play()
+            }
         }
         else
         {
-            self.prepareToPlay(self.urlTableController.streams.first?.urlString ?? "")
+            if streamObject != nil
+            {
+                self.prepareToPlay(streamObject!.urlString)
+            }
+            else
+            {
+                self.prepareToPlay(self.urlTableController.streams.first?.urlString ?? "")
+            }
         }
     }
     

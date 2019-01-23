@@ -31,17 +31,16 @@ class AudioService {
     return ctrl.stream;
   }
 
-  static Future<String> play() async {
-   String result = await platformChannel.invokeMethod('play');
-   return result;
-  }
-
-  static Future<String> playTrack(TrackMetadata track) async {
-    final trackJson = json.encode(track);
-    final result = await platformChannel.invokeMethod('play', trackJson);
+  static Future<String> play(TrackMetadata track) async {
+    String result = "";
+    if (track == null) {
+       result = await platformChannel.invokeMethod('play');
+    } else {
+      result = await platformChannel.invokeMethod('play', json.encode(track));
+    }
     return result;
   }
-
+  
   static Future<String> pause() async {
     String result = await platformChannel.invokeMethod('pause');
     return result;
