@@ -8,6 +8,30 @@ import 'package:music_player/source.dart';
 import 'package:music_player/songs.dart';
 import 'package:music_player/theme.dart';
 import 'package:music_player/trackModel.dart';
+import 'package:music_player/tracts_listview.dart';
+
+var tracksList = [
+  Track(
+      "0",
+      "SomaFM: Deep Space",
+      "http://somafm.com/img3/deepspaceone-400.jpg",
+      "http://ice1.somafm.com/deepspaceone-128-mp3"),
+  Track("1", "SomaFM: Drone Zone", "http://somafm.com/img3/dronezone-400.jpg",
+      "http://ice3.somafm.com/dronezone-256-mp3"),
+       Track("1", "SomaFM: Drone Zone", "http://somafm.com/img3/dronezone-400.jpg",
+      "http://ice3.somafm.com/dronezone-256-mp3"),
+      
+  Track("1", "SomaFM: Drone Zone", "http://somafm.com/img3/dronezone-400.jpg",
+      "http://ice3.somafm.com/dronezone-256-mp3"),
+       Track("1", "SomaFM: Drone Zone", "http://somafm.com/img3/dronezone-400.jpg",
+      "http://ice3.somafm.com/dronezone-256-mp3"),
+  Track(
+      "2",
+      "Space Station Soma",
+      "http://somafm.com/img3/spacestation-400.jpg",
+      "http://ice1.somafm.com/spacestation-128-mp3")
+      
+];
 
 void main() => runApp(MyApp());
 
@@ -39,7 +63,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   IconData _playIcon = Icons.play_arrow;
   PlayerState _state = PlayerState.unknown;
-  List<Track> _tracks = [];
+  List<Track> _tracks = tracksList;
   TrackMetadata _metadata = new TrackMetadata();
 
   @override
@@ -143,25 +167,20 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         children: <Widget>[
-          new Expanded(
-            child: new Container(),
-          ),
-          //seek bar
-          new Expanded(
-            child: new Center(
-              child: new Container(
-                height: 125.0,
-                width: 125.0,
-                child: ClipOval(
-                  clipper: new CircleClipper(),
-                  child: new Image.network(
-                    demoPlaylist.songs[0].albumArtUrl,
-                    fit: BoxFit.cover,
-                  ),
+          Container(
+            child: new Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom:0.0),
+                child: new Container(
+                height: 300.0,
+                child: new TrackListView(_tracks),
+
                 ),
               ),
             ),
           ),
+          //seek bar
+          
           //visuilazer
           new Container(
             width: double.infinity,
@@ -279,17 +298,4 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class CircleClipper extends CustomClipper<Rect> {
-  @override
-  Rect getClip(Size size) {
-    return new Rect.fromCircle(
-      center: new Offset(size.width / 2, size.height / 2),
-      radius: min(size.width, size.height) / 2,
-    );
-  }
 
-  @override
-  bool shouldReclip(CustomClipper<Rect> oldClipper) {
-    return true;
-  }
-}

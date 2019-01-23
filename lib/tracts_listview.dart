@@ -28,6 +28,7 @@ class _TrackListViewState extends State<TrackListView> {
 
   @override
   Widget build(BuildContext context) {
+    
     ListTile makeListTile(Track track) => ListTile(
           onTap: () =>  onTrackClick(track),
           contentPadding: EdgeInsets.symmetric(vertical: 10.0),
@@ -62,13 +63,16 @@ class _TrackListViewState extends State<TrackListView> {
         );
 
     final makeBody = SingleChildScrollView(
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: tracklist.length,
-        itemBuilder: (BuildContext context, int index) {
-          return makeCard(tracklist[index]);
-        },
+      child: Container(
+        height: 450.0,
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: tracklist.length,
+          itemBuilder: (BuildContext context, int index) {
+            return makeCard(tracklist[index]);
+          },
+        ),
       ),
     );
 
