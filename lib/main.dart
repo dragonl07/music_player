@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:music_player/audio_service.dart';
 import 'package:music_player/player_state.dart';
-import 'package:music_player/song_list.dart';
 import 'package:music_player/theme.dart';
 import 'package:music_player/trackModel.dart';
 import 'package:music_player/tracts_listview.dart';
@@ -131,25 +130,30 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         actions: <Widget>[
           new IconButton(
-            icon: new Icon(Icons.menu),
-            color: const Color(0xFFDDDDDD),
+            icon: new Icon(Icons.add),
+            color: Colors.black,
+            iconSize: 50.0,
             onPressed: () {},
           ),
         ],
       ),
       body: Column(
         children: <Widget>[
-          Container(
-            child: new Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom:0.0),
-                child: new Container(
-                height: 300.0,
-                child: new TrackListView(),
-
-                ),
+          new Container(
+           child: new TextField(
+              autofocus: true,
+              decoration: new InputDecoration(
+                border: new OutlineInputBorder(
+                  borderSide: new BorderSide(color: Colors.black, width: 5.0)
+                  
+                ) ,
               ),
             ),
+          ),
+          Container(
+            child: new Expanded(
+              child: new TrackListView(),
+             ),
           ),
           //seek bar
           
@@ -164,20 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
 
-          new Column(
-            children: <Widget>[
-              new IconButton(
-                color: Colors.grey,
-                icon: new Icon(Icons.menu),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SongList()),
-                  );
-                },
-              ),
-            ],
-          ),
+       
           //control buttons song details
           new Container(
             width: double.infinity,

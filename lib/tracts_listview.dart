@@ -74,15 +74,18 @@ class _TrackListViewState extends State<TrackListView> {
         );
 
     final makeBody = SingleChildScrollView(
-      child: Container(
-        height: 450.0,
-        child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: tracklist.length,
-          itemBuilder: (BuildContext context, int index) {
-            return makeCard(tracklist[index]);
-          },
+      child: Padding(
+        padding: const EdgeInsets.only(top:10.0),
+        child: Container(
+          height: 500.0,
+          child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: tracklist.length,
+            itemBuilder: (BuildContext context, int index) {
+              return makeCard(tracklist[index]);
+            },
+          ),
         ),
       ),
     );
