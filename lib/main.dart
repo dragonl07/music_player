@@ -1,40 +1,13 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:music_player/audio_service.dart';
 import 'package:music_player/player_state.dart';
 import 'package:music_player/song_list.dart';
-import 'package:music_player/source.dart';
-import 'package:music_player/songs.dart';
 import 'package:music_player/theme.dart';
 import 'package:music_player/trackModel.dart';
 import 'package:music_player/tracts_listview.dart';
 
-var tracksList = [
-  Track(
-      "0",
-      "SomaFM: Deep Space",
-      "http://somafm.com/img3/deepspaceone-400.jpg",
-      "http://ice1.somafm.com/deepspaceone-128-mp3"),
-  Track("1", "SomaFM: Drone Zone", "http://somafm.com/img3/dronezone-400.jpg",
-      "http://ice3.somafm.com/dronezone-256-mp3"),
-       Track("1", "SomaFM: Drone Zone", "http://somafm.com/img3/dronezone-400.jpg",
-      "http://ice3.somafm.com/dronezone-256-mp3"),
-      
-  Track("1", "SomaFM: Drone Zone", "http://somafm.com/img3/dronezone-400.jpg",
-      "http://ice3.somafm.com/dronezone-256-mp3"),
-       Track("1", "SomaFM: Drone Zone", "http://somafm.com/img3/dronezone-400.jpg",
-      "http://ice3.somafm.com/dronezone-256-mp3"),
-  Track(
-      "2",
-      "Space Station Soma",
-      "http://somafm.com/img3/spacestation-400.jpg",
-      "http://ice1.somafm.com/spacestation-128-mp3")
-      
-];
-
 void main() => runApp(MyApp());
-
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -63,7 +36,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   IconData _playIcon = Icons.play_arrow;
   PlayerState _state = PlayerState.unknown;
-  List<Track> _tracks = tracksList;
   TrackMetadata _metadata = new TrackMetadata();
 
   @override
@@ -77,16 +49,16 @@ class _MyHomePageState extends State<MyHomePage> {
         updatePlayIcon(data.playerState);
       }
       if (data.trackId != null) {
-        updateCurrentTrack(data.trackId);
+        //updateCurrentTrack(data.trackId);
       }
     });
   }
 
-  void updateCurrentTrack(String newTrackId) {
-    setState(() {
-      _tracks.forEach((f) => f.isPlayning = (f.id == newTrackId));
-    });
-  }
+  // void updateCurrentTrack(String newTrackId) {
+  //   setState(() {
+  //     _tracks.forEach((f) => f.isPlayning = (f.id == newTrackId));
+  //   });
+  // }
 
   void updatePlayIcon(PlayerState state) {
     setState(() {
