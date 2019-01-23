@@ -46,8 +46,8 @@ class _TrackListViewState extends State<TrackListView> {
           contentPadding: EdgeInsets.symmetric(vertical: 10.0),
           leading: Container(
             constraints: new BoxConstraints(maxHeight: 80),
-            padding: EdgeInsets.only(right: 1.0, top: 1.0, bottom: 1.0)
-            //child: Image.network(track.imageUrl, fit: BoxFit.fitHeight),
+            padding: EdgeInsets.only(right: 1.0, top: 1.0, bottom: 1.0),
+            child: Image.network("", fit: BoxFit.fitHeight),
           ),
           title: Text(
             track.title,
