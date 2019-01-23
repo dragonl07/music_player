@@ -173,7 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.only(bottom:0.0),
                 child: new Container(
                 height: 300.0,
-                child: new TrackListView(_tracks),
+                child: new TrackListView(),
 
                 ),
               ),
