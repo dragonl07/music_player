@@ -46,6 +46,11 @@ class URLTableViewController: NSObject, UITableViewDelegate, UITableViewDataSour
 
 class StreamObject: Object
 {
+    static let MediaTitleKey = "title";
+    static let MediaArtistKey = "artist";
+    static let MediaUrlKey = "url";
+    static let MediaIdKey = "id";
+    
     @objc dynamic var urlString: String = ""
     @objc dynamic var title: String = ""
     @objc dynamic var id: String = UUID().uuidString
@@ -77,6 +82,22 @@ class StreamObject: Object
     override static func primaryKey() -> String?
     {
         return "id"
+    }
+    
+    static func generateFlutterData(_ streams: [StreamObject]) -> [[String: Any]]
+    {
+        var data = [[String: Any]]()
+        
+        for stream in streams
+        {
+            var metadata = [String: Any]()
+            metadata[MediaTitleKey] = stream.title
+            metadata[MediaUrlKey] = stream.urlString
+            metadata[MediaIdKey] = stream.id
+            data.append(metadata)
+        }
+        
+        return data
     }
 }
 

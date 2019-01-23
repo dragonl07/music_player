@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:music_player/player_state.dart';
-import 'package:music_player/source.dart';
+import 'package:music_player/trackModel.dart';
 import 'dart:convert' show json;
 
 
@@ -36,7 +36,7 @@ class AudioService {
    return result;
   }
 
-  static Future<String> play_track(Track track) async {
+  static Future<String> playTrack(TrackMetadata track) async {
     final trackJson = json.encode(track);
     final result = await platformChannel.invokeMethod('play', trackJson);
     return result;
@@ -56,11 +56,4 @@ class AudioService {
     String result = await platformChannel.invokeMethod('prev');
     return result;
   }
-
-
-  // static Future<String> init(Source source) async {
-  //   String j = json.encode(source);
-  //   String result = await platformChannel.invokeMethod('init', j);
-  //   return result;
-  // }
 }

@@ -31,6 +31,7 @@ import AVFoundation
         
         let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
         let methodChannel = FlutterMethodChannel(name: "audio_service", binaryMessenger: controller)
+        let dataChannel = FlutterMethodChannel(name: "data_service", binaryMessenger: controller)
         
         self.audioService = AudioService(methodChannel)
         
@@ -54,6 +55,18 @@ import AVFoundation
             default: result(FlutterMethodNotImplemented)
             }
         })
+        
+        dataChannel.setMethodCallHandler {
+            [weak self] (call: FlutterMethodCall, result: FlutterResult) -> Void in
+            switch call.method
+            {
+            case "getData":
+                let streams = self!.audioService.urlTableController.streams
+                let data = StreamObject.generateFlutterData(streams)
+                result(data)
+            default: result(FlutterMethodNotImplemented)
+            }
+        }
         
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }

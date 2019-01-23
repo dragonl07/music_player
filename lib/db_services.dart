@@ -1,34 +1,27 @@
 import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-   
+import 'package:music_player/trackModel.dart';
 
-class DB_chanel{
-   String id;
-   String title;
-   String imageUrl;
-   String streamUrl;
+class DataService {
 
-static const PLATFORM_CHANNEL = const MethodChannel('<APP_BUNDLE_NAME>/platform_channel');
-// you can use whatever you like. but make sure you use the same channel string in native code also
-// platform channel method calling
-Future<Null> getData(BuildContext context) async {
-  try {
-    final String result = await PLATFORM_CHANNEL.invokeMethod(
-      'getData', // call the native function
-      <String, dynamic> { // data to be passed to the function
-        'id' : id,
-        'title': title,
-        'imageUrl': imageUrl,
-        'streamUrl': streamUrl
+  static const dataChannel = const MethodChannel('data_service');
 
+  static Future<dynamic> getData() async {
+    try {
+      final result = await dataChannel.invokeMethod('getData');
+      if (result is List) {
+        List<TrackMetadata> tracks = new List();
+        print("Right Data");
+        for (Map track in result) {
+          tracks.add(TrackMetadata.metadataFactory(track));
+        }
+        return tracks;
+      } else {
+        print("Not right object");
       }
-    );
-    // result hold the response from plaform calls
-  } on PlatformException catch (error) { // handle error
-    print('Error: $error'); // here
+    } on PlatformException catch (error) {
+      // handle error
+      print('Error: $error'); // here
+    }
   }
 }
-}
-

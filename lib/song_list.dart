@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:music_player/source.dart';
 import 'package:music_player/tracts_listview.dart';
+import 'package:music_player/trackModel.dart';
 var tracksList = [
   Track(
       "0",
@@ -34,10 +35,6 @@ class SongList extends StatefulWidget {
 }
 
 class SongListState extends State<SongList> {
-  List<Track> _tracks = tracksList;
-
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,8 +49,6 @@ class SongListState extends State<SongList> {
           color: Colors.black,
           iconSize: 40.0,
           onPressed: (){
-            
-            
           },
         ),
        ],
@@ -73,7 +68,7 @@ class SongListState extends State<SongList> {
             ),
             Padding(
               padding: const EdgeInsets.only(top:15.0),
-              child: new TrackListView(_tracks),
+              child: new TrackListView(),
             ),
           ],
         ),
