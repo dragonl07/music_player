@@ -29,9 +29,10 @@ import AVFoundation
             }
         }
         
-        self.audioService = AudioService()
         let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
         let methodChannel = FlutterMethodChannel(name: "audio_service", binaryMessenger: controller)
+        
+        self.audioService = AudioService(methodChannel)
         
         methodChannel.setMethodCallHandler({
             [weak self] (call: FlutterMethodCall, result: FlutterResult) -> Void in

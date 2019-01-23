@@ -1,11 +1,13 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:music_player/audio_service.dart';
 import 'package:music_player/player_state.dart';
 import 'package:music_player/song_list.dart';
 import 'package:music_player/source.dart';
 import 'package:music_player/songs.dart';
 import 'package:music_player/theme.dart';
+import 'package:music_player/trackModel.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,31 +19,35 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Music Player MediaBy'),
+      home: MyHomePage(title: 'Music Player'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
+  final TrackMetadata metadata = new TrackMetadata();
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
+
+  MyHomePage({Key key, this.title}) : super(key: key);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   IconData _playIcon = Icons.play_arrow;
   PlayerState _state = PlayerState.unknown;
   List<Track> _tracks = [];
+  TrackMetadata _metadata = new TrackMetadata();
 
-@override
+  @override
   void initState() {
     super.initState();
     // init();
+
+    AudioService.platformChannel.setMethodCallHandler(_handleStateChangeMethod);
     AudioService.state().listen((data) {
       if (data.playerState != null) {
         updatePlayIcon(data.playerState);
@@ -73,36 +79,45 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<dynamic> _handleStateChangeMethod(MethodCall call) async {
+    switch (call.method) {
+      case "updateNowPlayingInfo":
+        print("Now playing");
+        print(call.arguments);
+        setState(() {
+          this._metadata.map(call.arguments);
+        });
+        return;
+    }
+  }
+
+
   Future<String> playPause() async {
-  String result;
+    String result;
     if (_state == PlayerState.onPlay) {
-        result = await AudioService.pause();
+      result = await AudioService.pause();
     } else {
-        result = await AudioService.play();
+      result = await AudioService.play();
     }
 
-    if(result=="onPlay"){
+    if (result == "onPlay") {
       _state = PlayerState.onPlay;
-    }else{
+    } else {
       _state = PlayerState.onPause;
     }
     updatePlayIcon(_state);
+    return result;
   }
 
   Future<String> next() async {
     String result = await AudioService.next();
+    return result;
   }
 
   Future<String> prev() async {
     String result = await AudioService.prev();
+    return result;
   }
-
-  // Future<String> init() async {
-  //   await AudioService.init(new Source(_tracks));
-  // }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -111,9 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         leading: new IconButton(
-          icon: new Icon(
-            Icons.arrow_back_ios
-          ),
+          icon: new Icon(Icons.arrow_back_ios),
           color: const Color(0xFFDDDDDD),
           onPressed: () {},
         ),
@@ -121,13 +134,11 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
         actions: <Widget>[
-       new IconButton(
-          icon: new Icon(
-            Icons.menu
+          new IconButton(
+            icon: new Icon(Icons.menu),
+            color: const Color(0xFFDDDDDD),
+            onPressed: () {},
           ),
-          color: const Color(0xFFDDDDDD),
-          onPressed: () {},
-        ),
         ],
       ),
       body: Column(
@@ -136,94 +147,82 @@ class _MyHomePageState extends State<MyHomePage> {
             child: new Container(),
           ),
           //seek bar
-           new Expanded(
+          new Expanded(
             child: new Center(
-               child: new Container(
-                 height: 125.0,
-                 width: 125.0,
-                 child: ClipOval(
-                   clipper: new CircleClipper(),
-                     child: new Image.network(
-                     demoPlaylist.songs[0].albumArtUrl,
-                     fit: BoxFit.cover,
-                    ),
-                 ),
-               ),
+              child: new Container(
+                height: 125.0,
+                width: 125.0,
+                child: ClipOval(
+                  clipper: new CircleClipper(),
+                  child: new Image.network(
+                    demoPlaylist.songs[0].albumArtUrl,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
-           ),
+          ),
           //visuilazer
-           new Container(
+          new Container(
             width: double.infinity,
             height: 5.0,
             color: Colors.red,
             child: LinearProgressIndicator(
               backgroundColor: Colors.white,
               value: 50.0,
-              ),
-       ),
+            ),
+          ),
 
-       new Column(
-         children: <Widget>[
-           new IconButton(
-             color: Colors.grey,
-             icon: new Icon(
-               Icons.menu
-              ),
-                  onPressed: (){
-                   Navigator.push(
+          new Column(
+            children: <Widget>[
+              new IconButton(
+                color: Colors.grey,
+                icon: new Icon(Icons.menu),
+                onPressed: () {
+                  Navigator.push(
                     context,
-                     MaterialPageRoute(builder: (context) =>SongList()),
-                );
-              },
-           ),
-         ],
-       ),
+                    MaterialPageRoute(builder: (context) => SongList()),
+                  );
+                },
+              ),
+            ],
+          ),
           //control buttons song details
           new Container(
-          width: double.infinity,
-             child: Material(
+            width: double.infinity,
+            child: Material(
               color: accentColor,
-                child: Padding(
-                 padding: const EdgeInsets.only(top: 70.0, bottom: 120.0),
-                 child: new Column(
-                 children: <Widget>[
-
-                new RichText(
-                text: TextSpan(
-                  text: "",
-                  children: [
-                    new TextSpan (
-                      text: "",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 4.0,
-                        height: 1.5
-                      )
+              child: Padding(
+                padding: const EdgeInsets.only(top: 70.0, bottom: 120.0),
+                child: new Column(
+                  children: <Widget>[
+                    new RichText(
+                      text: TextSpan(text: "", children: [
+                        new TextSpan(
+                            text: this._metadata.title + "\n",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 4.0,
+                                height: 1.5)),
+                        new TextSpan(
+                            text: this._metadata.artist,
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.75),
+                                fontSize: 12.0,
+                                letterSpacing: 3.0,
+                                height: 1.5)),
+                      ]),
                     ),
-                    new TextSpan(
-                      text: 'artist name',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.75),
-                        fontSize: 12.0,
-                        letterSpacing: 3.0,
-                        height: 1.5
-
-                      )
-                    ),
-                  ]
-                ),
- 
-              ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30.0),
-                    child: Row(
-                          children: <Widget>[
-                            new Expanded(child: new Container()),
-                            new IconButton(
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30.0),
+                      child: Row(
+                        children: <Widget>[
+                          new Expanded(child: new Container()),
+                          new IconButton(
                             splashColor: lightAccentColor,
-                              highlightColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             icon: new Icon(
                               Icons.skip_previous,
                               color: Colors.white,
@@ -233,56 +232,51 @@ class _MyHomePageState extends State<MyHomePage> {
                               prev();
                             },
                           ),
-
-
-                            new Expanded(child: new Container()),
-                             new RawMaterialButton(
-                                    shape: CircleBorder(),
-                                    fillColor: Colors.white,
-                                    splashColor: accentColor,
-                                    highlightColor: lightAccentColor,
-                                    elevation: 10.0,
-                                    onPressed: () {
-                                      playPause();
-                                    },
-                                    child: new Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: new Icon(
-                                        _playIcon,
-                                        size: 35.0,
-                                        color: darkAccentColor,
-                                      ),
-                                    ),
-                                  ),
-                             
-
-                            new Expanded(child: new Container()),
-                            new IconButton(
-                                splashColor: lightAccentColor,
-                                  highlightColor: Colors.transparent,
-                                icon: new Icon(
-                                  Icons.skip_next,
-                                  color: Colors.white,
-                                  size: 40.0,
-                                ),
-                                onPressed: (){
-                                  next();
-                                },
-                                    ),
-                          
-                            new Expanded(child: new Container()),
-                            ],
-                        ),
-                  )
-            ],
+                          new Expanded(child: new Container()),
+                          new RawMaterialButton(
+                            shape: CircleBorder(),
+                            fillColor: Colors.white,
+                            splashColor: accentColor,
+                            highlightColor: lightAccentColor,
+                            elevation: 10.0,
+                            onPressed: () {
+                              playPause();
+                            },
+                            child: new Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: new Icon(
+                                _playIcon,
+                                size: 35.0,
+                                color: darkAccentColor,
+                              ),
+                            ),
+                          ),
+                          new Expanded(child: new Container()),
+                          new IconButton(
+                            splashColor: lightAccentColor,
+                            highlightColor: Colors.transparent,
+                            icon: new Icon(
+                              Icons.skip_next,
+                              color: Colors.white,
+                              size: 40.0,
+                            ),
+                            onPressed: () {
+                              next();
+                            },
+                          ),
+                          new Expanded(child: new Container()),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
-    ),
-  ],
-  ),
-  );
- }
+    );
+  }
 }
 
 class CircleClipper extends CustomClipper<Rect> {
@@ -298,6 +292,4 @@ class CircleClipper extends CustomClipper<Rect> {
   bool shouldReclip(CustomClipper<Rect> oldClipper) {
     return true;
   }
-
 }
-

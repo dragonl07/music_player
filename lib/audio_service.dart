@@ -1,24 +1,18 @@
 import 'dart:async';
-
 import 'package:flutter/services.dart';
-
 import 'package:music_player/player_state.dart';
-
 import 'package:music_player/source.dart';
-
 import 'dart:convert' show json;
 
 
 class AudioService {
-
-  static const MethodChannel _plugin_channel =
+  static const MethodChannel platformChannel =
   const MethodChannel('audio_service');
 
   static const BasicMessageChannel<dynamic> _audio_state =
   const BasicMessageChannel('audio_service_state_channel', JSONMessageCodec());
 
   static final StreamController<PlaybackState> ctrl = StreamController();
-
   
   static Future<String> getData(dynamic message) async {
     final Map<String, dynamic> jsonMessage = json.decode(message);
@@ -38,35 +32,35 @@ class AudioService {
   }
 
   static Future<String> play() async {
-   String result = await _plugin_channel.invokeMethod('play');
+   String result = await platformChannel.invokeMethod('play');
    return result;
   }
 
   static Future<String> play_track(Track track) async {
     final trackJson = json.encode(track);
-    final result = await _plugin_channel.invokeMethod('play', trackJson);
+    final result = await platformChannel.invokeMethod('play', trackJson);
     return result;
   }
 
   static Future<String> pause() async {
-    String result = await _plugin_channel.invokeMethod('pause');
+    String result = await platformChannel.invokeMethod('pause');
     return result;
   }
 
   static Future<String> next() async {
-    String result = await _plugin_channel.invokeMethod('next');
+    String result = await platformChannel.invokeMethod('next');
     return result;
   }
 
   static Future<String> prev() async {
-    String result = await _plugin_channel.invokeMethod('prev');
+    String result = await platformChannel.invokeMethod('prev');
     return result;
   }
 
 
   // static Future<String> init(Source source) async {
   //   String j = json.encode(source);
-  //   String result = await _plugin_channel.invokeMethod('init', j);
+  //   String result = await platformChannel.invokeMethod('init', j);
   //   return result;
   // }
 }
