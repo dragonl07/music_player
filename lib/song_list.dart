@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:music_player/source.dart';
 import 'package:music_player/tracts_listview.dart';
 var tracksList = [
@@ -25,8 +26,18 @@ var tracksList = [
       
 ];
 
-class SongList extends StatelessWidget {
+class SongList extends StatefulWidget {
+  @override
+  SongListState createState() {
+    return new SongListState();
+  }
+}
+
+class SongListState extends State<SongList> {
   List<Track> _tracks = tracksList;
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +52,8 @@ class SongList extends StatelessWidget {
           color: Colors.black,
           iconSize: 40.0,
           onPressed: (){
-
+            
+            
           },
         ),
        ],
@@ -67,5 +79,7 @@ class SongList extends StatelessWidget {
         ),
       ),
     );
-  }
+  } 
 }
+
+
