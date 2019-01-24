@@ -360,7 +360,7 @@ class AudioService: NSObject
             return
         }
         //var error: NSError? = nil
-        // Define Now Playing Info
+        //Define Now Playing Info
         var nowPlayingInfo = [String : Any]()
 
         for item in metadata {

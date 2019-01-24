@@ -40,8 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    // init();
-
+    
     AudioService.platformChannel.setMethodCallHandler(_handleStateChangeMethod);
     AudioService.state().listen((data) {
       if (data.playerState != null) {

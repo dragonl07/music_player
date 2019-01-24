@@ -29,7 +29,7 @@ import AVFoundation
             }
         }
         
-        let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
+        let controller: FlutterViewController = window?.rootViewController as! FlutterViewController
         let methodChannel = FlutterMethodChannel(name: "audio_service", binaryMessenger: controller)
         let dataChannel = FlutterMethodChannel(name: "data_service", binaryMessenger: controller)
         
@@ -46,7 +46,6 @@ import AVFoundation
                 self?.audioService.pause()
                 result("onPause")
             case "next":
-                print("Flutter next")
                 self?.audioService.nextSong()
                 result("onPlay")
             case "prev":
