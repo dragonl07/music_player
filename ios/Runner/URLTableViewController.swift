@@ -46,10 +46,11 @@ class URLTableViewController: NSObject, UITableViewDelegate, UITableViewDataSour
 
 class StreamObject: Object
 {
-    static let MediaTitleKey = "title";
-    static let MediaArtistKey = "artist";
-    static let MediaUrlKey = "url";
-    static let MediaIdKey = "id";
+    static let MediaTitleKey = "title"
+    static let MediaArtistKey = "artist"
+    static let MediaUrlKey = "url"
+    static let MediaIdKey = "id"
+    static let MediaIsPlaying = "isplaying"
     
     @objc dynamic var urlString: String = ""
     @objc dynamic var title: String = ""

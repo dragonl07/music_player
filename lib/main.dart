@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    
+
     AudioService.platformChannel.setMethodCallHandler(_handleStateChangeMethod);
     AudioService.state().listen((data) {
       if (data.playerState != null) {
@@ -74,6 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
         print(call.arguments);
         setState(() {
           this._metadata.map(call.arguments);
+          this.updatePlayIcon(this._metadata.isPlaying ? PlayerState.onPlay : PlayerState.onPause);
         });
         return;
     }

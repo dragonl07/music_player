@@ -5,6 +5,7 @@ class TrackMetadata extends Object {
   static const String MediaArtistKey = "artist";
   static const String MediaUrlKey = "url";
   static const String MediaIdKey = "id";
+  static const String MediaIsPlaying = "isplaying";
 
   String title = "";
   String artist = "";
@@ -31,6 +32,9 @@ class TrackMetadata extends Object {
         case MediaUrlKey:
           this.url = v;
           break;
+        case MediaIsPlaying:
+          this.isPlaying = v;
+          break;
         default:
           print("Unknown key");
       }
@@ -53,6 +57,9 @@ class TrackMetadata extends Object {
           break;
         case MediaUrlKey:
           metadata.url = v;
+          break;
+        case MediaIsPlaying:
+          metadata.isPlaying = v;
           break;
         default:
           print("Unknown key");

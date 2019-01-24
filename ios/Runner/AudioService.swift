@@ -386,7 +386,7 @@ class AudioService: NSObject
         }
         
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.timeControlStatus == .playing
-
+        nowPlayingInfo[StreamObject.MediaIsPlaying] = player.timeControlStatus == .playing
         // Set the metadata
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
         
